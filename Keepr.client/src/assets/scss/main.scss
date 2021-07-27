@@ -15,6 +15,13 @@
   background-color: $body-bg;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  .scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar2 {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 }
 
 main {

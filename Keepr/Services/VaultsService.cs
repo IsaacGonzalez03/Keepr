@@ -40,7 +40,7 @@ namespace Keepr.Services
     }
     // public string Delete(int id, string userId)
     // {
-    //   Vault vault = GetById(id);
+    //   Vault vault = GetById(id, vault.CreatorId);
     //   if (vault?.CreatorId != userId)
     //   {
     //     throw new Exception("This does not belong to you!");

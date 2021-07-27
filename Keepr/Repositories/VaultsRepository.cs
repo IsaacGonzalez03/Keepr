@@ -25,6 +25,11 @@ namespace Keepr.Repositories
       return newVault;
     }
 
+
+
+
+    // v.creatorId switch with a.id
+    //Account instead of profile p to a
     public Vault GetById(int id)
     {
       var sql = @"
@@ -57,7 +62,6 @@ namespace Keepr.Repositories
       return updateData;
     }
 
-    // NOTE Delete on its way
     // public int Delete(int id)
     // {
     //   var sql = @"
@@ -65,7 +69,7 @@ namespace Keepr.Repositories
     //   WHERE id = @Id 
     //   LIMIT 1;
     //   ";
-    //   _db.Execute(sql, new { id });
+    //   return _db.Execute(sql, new { id });
     // }
   }
 }
