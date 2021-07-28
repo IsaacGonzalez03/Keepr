@@ -20,16 +20,10 @@ namespace Keepr.Services
     }
 
 
-
-
-
     public List<Keep> GetAll()
     {
       return _kr.GetAll();
     }
-
-
-
 
 
     public Keep GetById(int id)
@@ -39,11 +33,7 @@ namespace Keepr.Services
       return keep;
     }
 
-
-
-
-
-    internal Keep Update(Keep updateData, string id)
+    public Keep Update(Keep updateData, string id)
     {
       Keep original = GetById(updateData.Id);
       if (original == null)
@@ -61,5 +51,22 @@ namespace Keepr.Services
       updateData.CreatorId = id;
       return _kr.Update(updateData);
     }
+
+    public List<Keep> GetKeepsByProfileId(string id)
+    {
+      return _kr.GetKeepsByProfileId(id);
+    }
+
+    public void Delete(int id, string creatorId)
+    {
+      Keep keep = GetById(id);
+      if (keep.CreatorId != creatorId)
+      {
+        throw new Exception("not the creator");
+      }
+      _kr.Delete(id);
+    }
+
+
   }
 }

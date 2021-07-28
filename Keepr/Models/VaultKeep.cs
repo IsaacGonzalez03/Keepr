@@ -1,3 +1,5 @@
+using System;
+
 namespace Keepr.Models
 {
   public class VaultKeep
@@ -6,12 +8,14 @@ namespace Keepr.Models
     public int vaultId { get; set; }
     public int keepId { get; set; }
     public string CreatorId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
   }
-  // public class VaultKeepViewModel : Keep
-  // {
-  //   public int VaultKeepId { get; set; }
-  //   public int VaultId { get; set; }
-  //   public int KeepId { get; set; }
-  // }
+  public class VaultKeepViewModel : Keep
+  {
+    public int VaultKeepId { get; set; }
+    public int VaultId { get; set; }
+    public int KeepId { get; set; }
+  }
 }

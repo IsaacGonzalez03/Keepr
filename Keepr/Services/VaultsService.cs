@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Keepr.Models;
 using Keepr.Repositories;
 
@@ -7,24 +8,25 @@ namespace Keepr.Services
   public class VaultsService
   {
     private readonly VaultsRepository _vr;
-    public VaultsService(VaultsRepository vr)
+    private readonly VaultKeepsRepository _vkr;
+
+    public VaultsService(VaultsRepository vr, VaultKeepsRepository vkr)
     {
       _vr = vr;
+      _vkr = vkr;
     }
+
     public Vault Create(Vault vaultData)
     {
       var newVault = _vr.Create(vaultData);
       return newVault;
     }
-    public Vault GetById(int id, string userId)
+    public Vault GetById(int id)
     {
       Vault vault = _vr.GetById(id);
-      if (vault.IsPrivate != true)
+      if (vault == null)
       {
-        if (vault.CreatorId != userId)
-        {
-          throw new Exception("Private Vault");
-        }
+        throw new Exception("bad id g-bid vs");
       }
       return vault;
     }
@@ -38,14 +40,30 @@ namespace Keepr.Services
       updateData.CreatorId = id;
       return _vr.Update(updateData);
     }
-    // public string Delete(int id, string userId)
-    // {
-    //   Vault vault = GetById(id, vault.CreatorId);
-    //   if (vault?.CreatorId != userId)
-    //   {
-    //     throw new Exception("This does not belong to you!");
-    //   }
-    //   return _vr.Delete(id);
-    // }
+
+    public List<VaultKeepViewModel> GetVaultKeeps(int id)
+    {
+      return _vkr.GetVaultKeeps(id);
+    }
+
+    public void Delete(int id, string creatorId)
+    {
+      Vault vault = GetById(id);
+      if (vault?.CreatorId != creatorId)
+      {
+        throw new Exception("This does not belong to you!");
+      }
+      _vr.Delete(id);
+    }
+
+    internal List<Vault> GetVaultsByAccountId(string id)
+    {
+      return _vr.GetVaultsByAccountId(id);
+    }
+
+    internal List<Vault> GetVaultsByProfileId(string id)
+    {
+      return _vr.GetVaultsByProfileId(id);
+    }
   }
 }

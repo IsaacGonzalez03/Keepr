@@ -1,3 +1,5 @@
+using System;
+
 namespace Keepr.Models
 {
   public class Vault
@@ -8,6 +10,8 @@ namespace Keepr.Models
     public string Description { get; set; }
     public string Img { get; set; }
     public bool IsPrivate { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
     public Profile Creator { get; set; }
   }
 }

@@ -65,9 +65,22 @@ namespace Keepr.Repositories
          }, new { id }).FirstOrDefault();
     }
 
-
-
-
+    public List<Keep> GetKeepsByProfileId(string id)
+    {
+      string sql = @"
+      SELECT
+      k.*,
+      a.*
+      FROM keeps k
+      JOIN accounts a ON a.id = k.creatorId
+      WHERE k.creatorId = @id;
+      ";
+      return _db.Query<Keep, Profile, Keep>(sql, (k, p) =>
+      {
+        k.Creator = p;
+        return k;
+      }, new { id }).ToList();
+    }
 
     public Keep Update(Keep updateData)
     {
@@ -85,6 +98,14 @@ namespace Keepr.Repositories
       _db.Execute(sql, updateData);
       return updateData;
     }
+
+    public void Delete(int id)
+    {
+      var sql = "DELETE FROM keeps WHERE id = @id LIMIT 1;";
+      _db.Execute(sql, new { id });
+    }
+
+
   }
 }
 

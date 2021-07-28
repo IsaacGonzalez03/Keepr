@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Dapper;
@@ -46,6 +47,8 @@ namespace Keepr.Repositories
          return v;
        }, new { id }).FirstOrDefault();
     }
+
+
     public Vault Update(Vault updateData)
     {
       var sql = @"
@@ -62,15 +65,45 @@ namespace Keepr.Repositories
       return updateData;
     }
 
-    // public int Delete(int id)
-    // {
-    //   var sql = @"
-    //   DELETE FROM vaults 
-    //   WHERE id = @Id 
-    //   LIMIT 1;
-    //   ";
-    //   return _db.Execute(sql, new { id });
-    // }
+
+    public void Delete(int id)
+    {
+      var sql = "DELETE FROM vaults WHERE id = @Id LIMIT 1;";
+      _db.Execute(sql, new { id });
+    }
+
+    public List<Vault> GetVaultsByAccountId(string userInfoId)
+    {
+      var sql = @"
+      SELECT
+      v.*,
+      a.*
+      FROM vaults v
+      JOIN accounts a ON a.id = v.creatorId
+      WHERE v.creatorId = @UserInfoId;
+      ";
+      return _db.Query<Vault, Profile, Vault>(sql, (v, p) =>
+      {
+        v.Creator = p;
+        return v;
+      }, new { userInfoId }).ToList();
+    }
+    public List<Vault> GetVaultsByProfileId(string id)
+    {
+      var sql = @"
+      SELECT
+      v.*,
+      a.*
+      FROM vaults v
+      JOIN accounts a ON a.id = v.creatorId
+      WHERE v.creatorId = @id AND isPrivate = 0;
+      ";
+      return _db.Query<Vault, Profile, Vault>(sql, (v, p) =>
+      {
+        v.Creator = p;
+        return v;
+      }, new { id }).ToList();
+    }
   }
 }
 // public int Id { get; set; }
