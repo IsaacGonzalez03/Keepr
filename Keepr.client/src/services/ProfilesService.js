@@ -1,5 +1,5 @@
-const { AppState } = require('../AppState')
-const { api } = require('./AxiosService')
+import { AppState } from '../AppState'
+import { api } from './AxiosService'
 
 class ProfilesService {
   async getById(id) {

@@ -29,3 +29,9 @@ main {
   display: flex;
   align-items: stretch;
 }
+.text-shadow{
+  text-shadow: 1px 1px 0px rgb(255, 255, 255);
+}
+.text-shadow:hover {
+  color: white;
+}

@@ -1,30 +1,96 @@
 <template>
-  <div class="profile">
-    <div class="container-fluid">
+  <div class="container-fluid">
+    <div class="row p-sm-5 p-2">
+      <div class="col-sm-3 card bg-none">
+        <img :src="state.profile.picture" alt="profile pic" class="bg-none">
+      </div>
+      <div class="col-2">
+        <p>{{ state.profile.name }}</p>
+        <p>Vaults: {{ state.vaults.length }}</p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
+          Vault <i class="fas fa-plus text-success text-shadow"></i>
+        </button>
+        <hr>
+        <p>Keeps: {{ state.keeps.length }}</p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#keepModal" data-whatever="@mdo">
+          Keep <i class="fas fa-plus text-success text-shadow"></i>
+        </button>
+
+        <hr>
+      </div>
       <div class="row">
-        <div class="col-5">
-          <div class="card d-flex">
-            <img :src="state.activeProfile.creator.picture" alt="profile pic">
-            <h1>{{ state.creator.name }}</h1>
-            <h2>Vaults: {{ state.accountVaults.length }}</h2>
-            <h2>Keeps: {{ state.accountKeeps.length }}</h2>
-          </div>
+        <div class="col">
+          <Keep v-for="keep in state.accountKeeps" :key="keep.id" :keep="keep" />
         </div>
       </div>
     </div>
   </div>
+  <NewKeepModal />
+  <NewVaultModal />
 </template>
 
 <script>
+import { reactive } from '@vue/reactivity'
+import { computed, onMounted } from '@vue/runtime-core'
+import { AppState } from '../AppState'
+import { profilesService } from '../services/ProfilesService'
+import Pop from '../utils/Notifier'
+import { vaultsService } from '../services/VaultsService'
+import { keepsService } from '../services/KeepsService'
+import { useRoute } from 'vue-router'
 export default {
-  name: 'Profile',
+  name: 'ProfilePage',
   setup() {
-    return {}
-  },
-  components: {}
+    const route = useRoute()
+    const state = reactive({
+      profile: computed(() => AppState.activeProfile),
+      vaults: computed(() => AppState.vaults),
+      account: computed(() => AppState.account),
+      accountVaults: computed(() => AppState.accountVaults),
+      accountKeeps: computed(() => AppState.accountKeeps),
+      keeps: computed(() => AppState.keeps),
+      newVault: {},
+      newKeep: {}
+    })
+    onMounted(async() => {
+      try {
+        await profilesService.getById(route.params.id)
+        await vaultsService.getVaultsByProfileId(route.params.id)
+        await keepsService.getKeepsByProfileId(route.params.id)
+      } catch (error) {
+        Pop.toast('error')
+      }
+    })
+    return {
+      state,
+      async newVault() {
+        try {
+          state.newVault.creatorId = state.account.id
+          await vaultsService.create(state.newVault)
+          Pop.toast('success')
+        } catch (error) {
+          Pop.toast('error')
+        }
+      },
+      async newKeep() {
+        try {
+          state.newKeep.creatorId = state.account.id
+          await keepsService.create(state.newKeep)
+          Pop.toast('success', 'success')
+        } catch (error) {
+          Pop.toast('error', 'error')
+        }
+      }
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-
+.bg-none{
+  position: relative;
+  background: none;
+  border: none;
+    border-radius: 100%;
+}
 </style>

@@ -9,17 +9,18 @@ class VaultsService {
 
   async create(newVault) {
     const res = await api.post('api/vaults', newVault)
-    AppState.vaults = [res.data, ...AppState.vaults]
+    AppState.accountVaults.push(res.data)
   }
 
   async update(vault) {
     const res = await api.put(`api/vaults/${vault.id}`, vault)
-    AppState.activeVault = res.data
+    AppState.vaults = AppState.vaults.filter(v => v.id !== vault.id)
+    AppState.vaults.push(res.data)
   }
 
   async delete(id) {
     await api.put(`api/vaults/${id}`)
-    // AppState.vaults = AppState.vaults.filter(v => v.id !== vaults.id)
+    AppState.accountVaults = AppState.accountVaults.filter(v => v.id !== id)
   }
 
   async getVaultsByAccountId(id) {
