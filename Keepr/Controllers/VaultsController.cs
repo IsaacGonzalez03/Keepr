@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
@@ -28,6 +29,18 @@ namespace Keepr.Controllers
         Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
         Vault vault = _vs.GetById(id);
         List<VaultKeepViewModel> keeps = _vs.GetVaultKeeps(id);
+        if (userInfo == null && vault.IsPrivate == true)
+        {
+          throw new Exception("private");
+        }
+        if (vault.IsPrivate == true)
+        {
+          if (userInfo.Id == vault.CreatorId)
+          {
+            return Ok(keeps);
+          }
+          throw new Exception("private");
+        }
         return Ok(keeps);
       }
       catch (System.Exception e)
@@ -55,11 +68,6 @@ namespace Keepr.Controllers
         return BadRequest(e.Message);
       }
     }
-
-
-
-
-
     [HttpGet("{id}")]
     public async Task<ActionResult<Vault>> GetById(int id)
     {
@@ -67,9 +75,21 @@ namespace Keepr.Controllers
       {
         Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
         Vault vault = _vs.GetById(id);
+        if (userInfo == null && vault.IsPrivate == true)
+        {
+          throw new Exception("private");
+        }
+        if (vault.IsPrivate == true)
+        {
+          if (userInfo.Id == vault.CreatorId)
+          {
+            return vault;
+          }
+          throw new Exception("private");
+        }
         return Ok(vault);
       }
-      catch (System.Exception e)
+      catch (Exception e)
       {
         return BadRequest(e.Message);
       }

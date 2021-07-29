@@ -24,10 +24,6 @@ namespace Keepr.Repositories
       newKeep.Id = _db.ExecuteScalar<int>(sql, newKeep);
       return newKeep;
     }
-
-
-
-
     public List<Keep> GetAll()
     {
       var sql = @"
@@ -43,10 +39,6 @@ namespace Keepr.Repositories
          return k;
        }, splitOn: "id").ToList();
     }
-
-
-
-
 
     public Keep GetById(int id)
     {
@@ -64,7 +56,6 @@ namespace Keepr.Repositories
            return k;
          }, new { id }).FirstOrDefault();
     }
-
     public List<Keep> GetKeepsByProfileId(string id)
     {
       string sql = @"
@@ -99,13 +90,12 @@ namespace Keepr.Repositories
       return updateData;
     }
 
-    public void Delete(int id)
+    public int Delete(int id)
     {
-      var sql = "DELETE FROM keeps WHERE id = @id LIMIT 1;";
-      _db.Execute(sql, new { id });
+      var sql = "DELETE FROM keeps WHERE id = @id;";
+      int deletedKeep = _db.Execute(sql, new { id });
+      return deletedKeep;
     }
-
-
   }
 }
 

@@ -18,21 +18,17 @@ namespace Keepr.Services
       var newKeep = _kr.Create(keepData);
       return newKeep;
     }
-
-
     public List<Keep> GetAll()
     {
       return _kr.GetAll();
     }
-
-
     public Keep GetById(int id)
     {
-      //NOTE view count 
       Keep keep = _kr.GetById(id);
+      keep.Views++;
+      _kr.Update(keep);
       return keep;
     }
-
     public Keep Update(Keep updateData, string id)
     {
       Keep original = GetById(updateData.Id);
@@ -47,26 +43,27 @@ namespace Keepr.Services
       original.Name = updateData.Name ?? original.Name;
       original.Description = updateData.Description ?? original.Description;
       original.Img = updateData.Img ?? original.Img;
-      // NOTE how to handle views shares and keeps
       updateData.CreatorId = id;
       return _kr.Update(updateData);
     }
-
     public List<Keep> GetKeepsByProfileId(string id)
     {
-      return _kr.GetKeepsByProfileId(id);
+      List<Keep> keeps = _kr.GetKeepsByProfileId(id);
+      return keeps;
     }
-
-    public void Delete(int id, string creatorId)
+    public string Delete(int id, string creatorId)
     {
       Keep keep = GetById(id);
       if (keep.CreatorId != creatorId)
       {
-        throw new Exception("not the creator");
+        throw new UnauthorizedAccessException("not the creator");
       }
-      _kr.Delete(id);
+      int deletedKeep = _kr.Delete(id);
+      if (deletedKeep != 1)
+      {
+        throw new Exception("cannot delete");
+      }
+      return "deleted keep";
     }
-
-
   }
 }

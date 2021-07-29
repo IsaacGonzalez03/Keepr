@@ -1,5 +1,5 @@
-const { AppState } = require('../AppState')
-const { api } = require('./AxiosService')
+import { AppState } from '../AppState'
+import { api } from './AxiosService'
 
 class VaultsService {
   async getById(id) {
@@ -13,11 +13,13 @@ class VaultsService {
   }
 
   async update(vault) {
-    await api.put(`api/vaults/${vault.id}`, vault)
+    const res = await api.put(`api/vaults/${vault.id}`, vault)
+    AppState.activeVault = res.data
   }
 
   async delete(id) {
     await api.put(`api/vaults/${id}`)
+    // AppState.vaults = AppState.vaults.filter(v => v.id !== vaults.id)
   }
 
   async getVaultsByAccountId(id) {

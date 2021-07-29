@@ -8,18 +8,24 @@ namespace Keepr.Services
   {
     private readonly VaultKeepsRepository _vkr;
     private readonly KeepsRepository _kr;
+    private readonly VaultsRepository _vr;
 
-    public VaultKeepsService(VaultKeepsRepository vkr, KeepsRepository kr)
+    public VaultKeepsService(VaultKeepsRepository vkr, KeepsRepository kr, VaultsRepository vr)
     {
       _vkr = vkr;
       _kr = kr;
+      _vr = vr;
     }
+
     public VaultKeep Create(VaultKeep newVaultKeep)
     {
-      Keep keep = _kr.GetById(newVaultKeep.keepId);
-      keep.Keeps++;
-      _kr.Update(keep);
-      return _vkr.Create(newVaultKeep);
+      Vault vault = _vr.GetById(newVaultKeep.vaultId);
+      if (vault.CreatorId != newVaultKeep.CreatorId)
+      {
+        throw new Exception("Unable to add to Vault");
+      }
+      VaultKeep newVK = _vkr.Create(newVaultKeep);
+      return newVK;
     }
 
     public VaultKeepViewModel GetById(int id)
@@ -32,24 +38,15 @@ namespace Keepr.Services
       return keep;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    public void Delete(int id, string creatorId)
+    public string Delete(int id, string userId)
     {
       VaultKeepViewModel vaultKeep = _vkr.GetById(id);
-      Keep keep = _kr.GetById(vaultKeep.Id);
-      keep.Keeps--;
-      _kr.Update(keep);
-      _vkr.Delete(id);
+      if (vaultKeep.CreatorId != userId)
+      {
+        throw new Exception("not yours to delete");
+      }
+      int deletedVK = _vkr.Delete(id);
+      return "she gone";
     }
   }
 }

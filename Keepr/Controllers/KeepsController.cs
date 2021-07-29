@@ -35,10 +35,6 @@ namespace Keepr.Controllers
       }
     }
 
-
-
-
-
     [HttpGet]
     public ActionResult<List<Keep>> GetAll()
     {
@@ -52,10 +48,6 @@ namespace Keepr.Controllers
         return BadRequest(e.Message);
       }
     }
-
-
-
-
 
     [HttpGet("{id}")]
     public ActionResult<Keep> GetById(int id)
@@ -71,8 +63,6 @@ namespace Keepr.Controllers
       }
     }
 
-
-
     [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult<Keep>> Update(int id, [FromBody] Keep updateData)
@@ -81,9 +71,9 @@ namespace Keepr.Controllers
       {
         Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
         updateData.Id = id;
-        Keep upVault = _ks.Update(updateData, userInfo.Id);
-        upVault.Creator = userInfo;
-        return Ok(upVault);
+        Keep updateVault = _ks.Update(updateData, userInfo.Id);
+        updateVault.Creator = userInfo;
+        return Ok(updateVault);
       }
       catch (System.Exception e)
       {
@@ -98,7 +88,7 @@ namespace Keepr.Controllers
       try
       {
         Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-        _ks.Delete(id, userInfo.Id);
+        string deletedKeep = _ks.Delete(id, userInfo.Id);
         return Ok("she gone");
       }
       catch (System.Exception e)
@@ -106,7 +96,5 @@ namespace Keepr.Controllers
         return BadRequest(e.Message);
       }
     }
-
-
   }
 }

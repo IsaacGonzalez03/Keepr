@@ -2,12 +2,13 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <div class="card-columns">
+        <div class="card-columns mt-4">
           <Keep v-for="keep in state.keeps" :key="keep.id" :keep="keep" />
         </div>
       </div>
     </div>
   </div>
+  <KeepModal />
 </template>
 
 <script>

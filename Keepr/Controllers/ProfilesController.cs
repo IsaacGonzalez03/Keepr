@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
@@ -29,11 +30,12 @@ namespace Keepr.Controllers
         Profile profile = _accountService.getProfileById(id);
         return Ok(profile);
       }
-      catch (System.Exception e)
+      catch (Exception e)
       {
         return BadRequest(e.Message);
       }
     }
+
     [HttpGet("{id}/keeps")]
     public ActionResult<List<Vault>> GetKeepsByProfileId(string id)
     {
@@ -47,6 +49,7 @@ namespace Keepr.Controllers
         return BadRequest(e.Message);
       }
     }
+
     [HttpGet("{id}/vaults")]
     public async Task<ActionResult<List<Vault>>> GetVaultsByProfileId(string id)
     {
@@ -76,7 +79,7 @@ namespace Keepr.Controllers
           return BadRequest("private");
         }
       }
-      catch (System.Exception e)
+      catch (Exception e)
       {
         return BadRequest(e.Message);
       }

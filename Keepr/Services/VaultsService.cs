@@ -56,12 +56,12 @@ namespace Keepr.Services
       _vr.Delete(id);
     }
 
-    internal List<Vault> GetVaultsByAccountId(string id)
+    public List<Vault> GetVaultsByAccountId(string id)
     {
       return _vr.GetVaultsByAccountId(id);
     }
 
-    internal List<Vault> GetVaultsByProfileId(string id)
+    public List<Vault> GetVaultsByProfileId(string id)
     {
       return _vr.GetVaultsByProfileId(id);
     }

@@ -40,7 +40,7 @@ namespace Keepr.Repositories
 
     public VaultKeep Create(VaultKeep newVK)
     {
-      string sql = @"
+      var sql = @"
       INSERT INTO
       vault_keeps(vaultId,keepId,creatorId)
       VALUES(@VaultId, @KeepId,@CreatorId);
@@ -52,16 +52,16 @@ namespace Keepr.Repositories
 
 
 
-    public void Delete(int id)
+    public int Delete(int id)
     {
-      string sql = "DELETE FROM vault_keeps WHERE id=@Id LIMIT 1;";
-      _db.Execute(sql, new { id });
+      var sql = "DELETE FROM vault_keeps WHERE id = @Id;";
+      return _db.Execute(sql, new { id });
     }
 
 
     public List<VaultKeepViewModel> GetVaultKeeps(int id)
     {
-      string sql = @"
+      var sql = @"
       SELECT
       k.*,
       vk.id AS vaultKeepId,
