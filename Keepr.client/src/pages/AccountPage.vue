@@ -7,11 +7,17 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { AppState } from '../AppState'
+import { keepsService } from '../services/KeepsService'
+import { useRoute } from 'vue-router'
 export default {
   name: 'Account',
   setup() {
+    const route = useRoute()
+    onMounted(async() => {
+      await keepsService.getKeepsByAccountId(route.params.id)
+    })
     return {
       account: computed(() => AppState.account)
     }

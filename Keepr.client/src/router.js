@@ -13,8 +13,13 @@ const routes = [
   },
   {
     path: '/profile',
-    name: 'Profile',
+    name: 'ProfilePage',
     component: loadPage('ProfilePage')
+  },
+  {
+    path: '/vault',
+    name: 'VaultPage',
+    component: loadPage('VaultPage')
   },
   {
     path: '/account',

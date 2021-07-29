@@ -1,4 +1,5 @@
 import { AppState } from '../AppState'
+import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
 class VaultKeepsService {
@@ -9,6 +10,7 @@ class VaultKeepsService {
 
   async getVaultKeep(id) {
     const res = await api.get(`api/vaultKeeps/${id}`)
+    logger.log(res)
     AppState.activeVaultKeep = res.data
   }
 

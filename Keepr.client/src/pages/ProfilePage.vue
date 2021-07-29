@@ -15,12 +15,21 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#keepModal" data-whatever="@mdo">
           Keep <i class="fas fa-plus text-success text-shadow"></i>
         </button>
-
-        <hr>
       </div>
       <div class="row">
-        <div class="col">
-          <Keep v-for="keep in state.accountKeeps" :key="keep.id" :keep="keep" />
+        <div class="col-12">
+          <h1>Vaults</h1>
+          <hr>
+          <div class="card-columns">
+            <Vault v-for="vault in state.vaults" :key="vault.id" :vault="vault" />
+          </div>
+        </div>
+        <div class="col-12">
+          <h1>Keeps</h1>
+          <hr>
+          <div class="card-columns">
+            <Keep v-for="keep in state.keeps" :key="keep.id" :keep="keep" />
+          </div>
         </div>
       </div>
     </div>
@@ -76,9 +85,9 @@ export default {
         try {
           state.newKeep.creatorId = state.account.id
           await keepsService.create(state.newKeep)
-          Pop.toast('success', 'success')
+          window.alert('created')
         } catch (error) {
-          Pop.toast('error', 'error')
+          window.alert('failed')
         }
       }
     }

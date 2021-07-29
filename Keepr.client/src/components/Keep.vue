@@ -5,11 +5,8 @@
       <p>
         {{ keep.name }}
       </p>
-      <div class="d-flex">
-        <img :src="keep.creator.picture" alt="creator-img" class="user-pic">
-        <p>
-          {{ keep.creator.name }}
-        </p>
+      <div>
+        <img :src="keep.creator.picture" alt="creator-img" class="user-pic m-3">
       </div>
     </div>
   </div>

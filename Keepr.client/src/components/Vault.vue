@@ -1,14 +1,14 @@
 <template>
-  <div class="vault card col-md-3 col-6">
+  <div class="vault card">
     <div @click="getVault">
       <img :src="vault.img" class="card-img-top img-fluid w-100">
       <h5>{{ vault.name }}</h5>
-      <p v-if="vault.isPravate == true">
+      <p v-if="vault.isPrivate == true">
         Private
       </p>
     </div>
     <div>
-      <button class="btn" data-dismiss="modal" @click="deleteVault" v-if="state.account.id === vault.creatorId">
+      <button class="btn btn-danger" data-dismiss="modal" @click="deleteVault" v-if="state.account.id === vault.creatorId">
         Delete
       </button>
     </div>
@@ -34,11 +34,7 @@ export default {
     })
     return {
       router,
-      state,
-      async getVault() {
-        await vaultsService.getById(props.vault.id)
-        router.push({ name: 'VaultPage', params: { id: props.vault.id } })
-      }
+      state
     }
   }
 }
