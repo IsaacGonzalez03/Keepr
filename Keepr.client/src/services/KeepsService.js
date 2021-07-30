@@ -27,7 +27,9 @@ class KeepsService {
 
   async delete(id) {
     await api.delete(`api/keeps/${id}`)
-    AppState.accountKeeps = AppState.accountKeeps.filter(k => k.id !== id)
+    this.getAll()
+    // updating account stuff on delete vvvv
+    this.getKeepsByAccountId(AppState.account.id)
   }
 
   async getKeepsByVaultId(id) {

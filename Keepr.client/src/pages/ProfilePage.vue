@@ -1,5 +1,8 @@
 <template>
-  <div class="container-fluid">
+  <div v-if="state.loading===true && !state.profile">
+    ...Loading
+  </div>
+  <div class="container-fluid" v-else>
     <div class="row p-sm-5 p-2">
       <div class="col-sm-3 card bg-none">
         <img :src="state.profile.picture" alt="profile pic" class="bg-none">
@@ -7,12 +10,26 @@
       <div class="col-2">
         <p>{{ state.profile.name }}</p>
         <p>Vaults: {{ state.vaults.length }}</p>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
+        <button title="add vault"
+                v-if="state.account.id == state.profile.id"
+                type="button"
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                data-whatever="@mdo"
+        >
           Vault <i class="fas fa-plus text-success text-shadow"></i>
         </button>
         <hr>
         <p>Keeps: {{ state.keeps.length }}</p>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#keepModal" data-whatever="@mdo">
+        <button title="add keep"
+                v-if="state.account.id == state.profile.id"
+                type="button"
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#keepModal"
+                data-whatever="@mdo"
+        >
           Keep <i class="fas fa-plus text-success text-shadow"></i>
         </button>
       </div>
@@ -59,13 +76,15 @@ export default {
       accountKeeps: computed(() => AppState.accountKeeps),
       keeps: computed(() => AppState.keeps),
       newVault: {},
-      newKeep: {}
+      newKeep: {},
+      loading: true
     })
     onMounted(async() => {
       try {
         await profilesService.getById(route.params.id)
         await vaultsService.getVaultsByProfileId(route.params.id)
         await keepsService.getKeepsByProfileId(route.params.id)
+        state.loading = false
       } catch (error) {
         Pop.toast('error')
       }

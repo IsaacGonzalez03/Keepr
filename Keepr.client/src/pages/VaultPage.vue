@@ -3,34 +3,45 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col">
-          {{ state.vault.name }}
+          <p>
+            {{ state.vault.name }}
+          </p>
           <hr>
-          <div class="card-column">
-            <Keep v-for="keep in state.keeps" :key="keep.id" :keep="keep" />
+          <div class="card-columns">
+            <VKeep v-for="keep in state.keep" :key="keep.id" :keep="keep" />
           </div>
         </div>
       </div>
     </div>
   </div>
+  <VKModal />
 </template>
 
 <script>
 import { reactive } from '@vue/reactivity'
 import { computed, onMounted } from '@vue/runtime-core'
 import { AppState } from '../AppState'
-import { vaultKeepsService } from '../services/VaultKeepsService'
+import { keepsService } from '../services/KeepsService'
+import { useRoute } from 'vue-router'
+import { vaultsService } from '../services/VaultsService'
 export default {
   name: 'VaultPage',
   setup() {
+    const route = useRoute()
     const state = reactive({
       profile: computed(() => AppState.activeProfile),
-      vault: computed(() => AppState.activeVaultKeep)
+      vault: computed(() => AppState.activeVault),
+      keep: computed(() => AppState.keeps)
     })
     onMounted(async() => {
       try {
-        await vaultKeepsService.getVaultKeep()
+        // if (state.profile.id !== state.vault.creatorId && state.vault.isPrivate === true) {
+        //   router.push({ path: 'Home' })
+        // } else {
+        await vaultsService.getById(route.params.id)
+        await keepsService.getKeepsByVaultId(route.params.id)
+        // }
       } catch (error) {
-
       }
     })
     return { state }
@@ -39,5 +50,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.card-columns{
+  column-count: 4;
+}
+@media(max-width: 650px){
+.card-columns{
+  column-count: 2;
+}
+}
 
 </style>

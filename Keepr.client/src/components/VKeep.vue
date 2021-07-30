@@ -1,11 +1,5 @@
 <template>
-  <div title="open keep"
-       type="button"
-       class="bg-none card rounded shadow text-white text-wrap"
-       data-toggle="modal"
-       data-target="#Modal"
-       @click="getKeep"
-  >
+  <div type="button" class="bg-none card rounded shadow text-white text-wrap" data-toggle="modal" data-target="#Modal" @click="getVKeep">
     <img :src="keep.img" alt="image" class="rounded card-img img-fluid">
     <div class="d-flex justify-content-around card-img-overlay card-text align-items-end pb-0">
       <p>
@@ -25,6 +19,7 @@ import { AppState } from '../AppState'
 import { keepsService } from '../services/KeepsService'
 import Pop from '../utils/Notifier'
 import { computed } from '@vue/runtime-core'
+import { vaultKeepsService } from '../services/VaultKeepsService'
 export default {
   name: 'Keep',
   props: {
@@ -36,9 +31,10 @@ export default {
     })
     return {
       state,
-      async getKeep() {
+      async getVKeep() {
         try {
           await keepsService.getKeep(props.keep.id)
+          await vaultKeepsService.getVaultKeep(props.keep.vaultKeepId)
         } catch (error) {
           Pop.toast('error')
         }

@@ -7,7 +7,7 @@
             <h5 class="modal-title" id="exampleModalLabel">
               New Keep
             </h5>
-            <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+            <button title="close" type="button" class="btn" data-dismiss="modal" aria-label="Close">
               <i class="fas fa-times"></i>
             </button>
           </div>
@@ -25,7 +25,7 @@
                 <label for="vault img">img url</label>
                 <input type="text" required v-model="state.newKeep.img">
               </div>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" title="submit" class="btn btn-primary">
                 Submit
               </button>
             </form>

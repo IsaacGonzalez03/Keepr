@@ -52,4 +52,13 @@ body {
    background: #f2f2f2;
 }
 
+.card-columns{
+  column-count: 4;
+}
+@media(max-width: 650px){
+.card-columns{
+  column-count: 2;
+}
+}
+
 </style>

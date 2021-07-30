@@ -52,10 +52,10 @@ namespace Keepr.Repositories
 
 
 
-    public int Delete(int id)
+    public void Delete(int id)
     {
       var sql = "DELETE FROM vault_keeps WHERE id = @Id;";
-      return _db.Execute(sql, new { id });
+      _db.Execute(sql, new { id });
     }
 
 

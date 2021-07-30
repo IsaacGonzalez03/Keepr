@@ -7,7 +7,7 @@
             <h5 class="modal-title" id="exampleModalLabel">
               New Vault
             </h5>
-            <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+            <button title="close" type="button" class="btn" data-dismiss="modal" aria-label="Close">
               <i class="fas fa-times"></i>
             </button>
           </div>
@@ -30,7 +30,7 @@
                   <input type="checkbox" v-model="state.newVault.isPrivate">
                 </label>
               </div>
-              <button type="submit" class="btn btn-primary">
+              <button title="submit" type="submit" class="btn btn-primary">
                 Submit
               </button>
             </form>
