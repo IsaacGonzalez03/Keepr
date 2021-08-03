@@ -26,7 +26,7 @@
       </ul>
       <span class="navbar-text">
         <button
-          class="btn btn-success text-uppercase"
+          class="btn btn-success text-white text-uppercase"
           @click="login"
           v-if="!user.isAuthenticated"
         >
